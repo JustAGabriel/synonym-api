@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	synonyms map[string]map[string]bool
+	synonyms Graph
 )
 
 type SynonymsPayload struct {
@@ -31,28 +31,8 @@ func addSynonyms(syns []string) {
 	for idx, word := range syns {
 		synsWithoutWord := getCollectionWithoutElements(syns, syns[0:idx])
 		for _, word2 := range synsWithoutWord {
-			addSynonym(word, word2)
+			synonyms.ConnectNodes(word, word2)
 		}
-	}
-}
-
-func addSynonym(w1, w2 string) {
-	existingSynonyms, found := synonyms[w1]
-	if !found {
-		synonyms[w1] = map[string]bool{
-			w2: true,
-		}
-	} else {
-		existingSynonyms[w2] = true
-	}
-
-	existingSynonyms, found = synonyms[w2]
-	if !found {
-		synonyms[w2] = map[string]bool{
-			w1: true,
-		}
-	} else {
-		existingSynonyms[w1] = true
 	}
 }
 
