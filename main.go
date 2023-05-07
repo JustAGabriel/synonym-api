@@ -14,22 +14,9 @@ type SynonymsPayload struct {
 	Synonyms []string
 }
 
-func getCollectionWithoutElements[T comparable](collection []T, excludes []T) []T {
-	r := []T{}
-	for _, v := range collection {
-		for _, ex := range excludes {
-			if ex == v {
-				continue
-			}
-		}
-		r = append(r, v)
-	}
-	return r
-}
-
 func addSynonyms(syns []string) {
 	for idx, word := range syns {
-		synsWithoutWord := getCollectionWithoutElements(syns, syns[0:idx])
+		synsWithoutWord := GetCollectionWithoutElements(syns, syns[0:idx]...)
 		for _, word2 := range synsWithoutWord {
 			synonyms.ConnectNodes(word, word2)
 		}
